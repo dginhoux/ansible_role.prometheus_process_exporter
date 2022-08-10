@@ -1,0 +1,15 @@
+[Unit]
+Description={{ prometheus_process_exporter_name }}
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+TimeoutStartSec=0
+Nice={{ prometheus_process_exporter_nice_level }}
+User={{ prometheus_process_exporter_run_user }}
+ExecStart={{ prometheus_process_exporter_bin_path }} {{ prometheus_process_exporter_options }}
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

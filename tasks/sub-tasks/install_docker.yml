@@ -1,0 +1,26 @@
+---
+- name: start process_exporter container
+  community.docker.docker_container:
+    name: process_exporter
+    state: started
+    image: "{{ prometheus_process_exporter_docker_image }}:{{ prometheus_process_exporter_version }}"
+    detach: true
+    recreate: true
+    restart: true
+    privileged: true
+    # user: root
+    pid_mode: host
+    network_mode: host
+    restart_policy: unless-stopped
+    command: >-
+      --procfs /host/proc
+      {{ prometheus_process_exporter_options }}
+    env:
+      TZ: Europe/Paris
+    volumes:
+      - /proc:/host/proc:ro
+      - "{{ prometheus_process_exporter_conf_file_path }}:{{ prometheus_process_exporter_conf_file_path }}"
+    # ports:
+    #   - "9100:9100"
+    memory: 128m
+    cpus: 0.15

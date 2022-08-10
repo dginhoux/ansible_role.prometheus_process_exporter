@@ -1,0 +1,64 @@
+---
+- name: "install {{ prometheus_process_exporter_name }}"
+  block:
+
+    - name: create config file
+      template:
+        #content: "{{ prometheus_process_exporter_conf_file_content }}"
+        src: process-exporter.yml
+        dest: "{{ prometheus_process_exporter_conf_file_path }}"
+        owner: root
+        group: root
+        mode: 0644
+        variable_start_string: ___
+        variable_end_string: ___
+
+    - include_tasks:
+        file: tasks/sub-tasks/install_docker.yml
+      when: deploy_process_exporter_mode is defined
+            and
+            deploy_process_exporter_mode == "docker"
+
+    - include_tasks:
+        file: tasks/sub-tasks/install_binary.yml
+      when: deploy_process_exporter_mode is defined
+            and
+            deploy_process_exporter_mode == "binary"
+
+    - name: "verify {{ prometheus_process_exporter_name }} is responding to requests"
+      uri:
+        url: http://127.0.0.1:{{ prometheus_process_exporter_port }}/
+        return_content: true
+      register: metrics_output
+      failed_when: "'Metrics' not in metrics_output.content"
+      retries: 6
+      delay: 60
+
+  when: deploy_process_exporter is defined
+        and
+        deploy_process_exporter == "install"
+
+
+- name: "uninstall {{ prometheus_process_exporter_name }}"
+  block:
+
+    - include_tasks:
+        file: tasks/sub-tasks/uninstall_docker.yml
+      when: deploy_process_exporter_mode is defined
+            and
+            deploy_process_exporter_mode == "docker"
+
+    - include_tasks:
+        file: tasks/sub-tasks/uninstall_binary.yml
+      when: deploy_process_exporter_mode is defined
+            and
+            deploy_process_exporter_mode == "binary"
+
+    - name: remove config file
+      file:
+        path: "{{ prometheus_process_exporter_conf_file_path }}"
+        state: absent
+
+  when: deploy_process_exporter is defined
+        and
+        deploy_process_exporter == "uninstall"

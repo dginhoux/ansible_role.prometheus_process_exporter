@@ -1,0 +1,44 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: {{ prometheus_process_exporter_name }}
+# Description:       {{ prometheus_process_exporter_name }}
+### END INIT INFO
+
+
+start() {
+  ## {{ prometheus_process_exporter_bin_path }} {{ prometheus_process_exporter_options }} &
+  su -c 'nice -n {{ prometheus_process_exporter_nice_level }} {{ prometheus_process_exporter_bin_path }} {{ prometheus_process_exporter_options }} &' -s /bin/sh process_exporter
+}	
+
+
+stop() {
+  pkill process_exporter
+}
+
+
+restart() {
+	stop
+	sleep 5
+	start
+}
+
+
+case "$1" in
+  start)
+	  start
+	;;
+  stop)
+  	stop
+	;;
+  restart)
+  	restart
+	;;
+  *)
+	echo "usage: $0 {start|stop|restart}"
+	exit 4
+esac
+
+
+exit $?

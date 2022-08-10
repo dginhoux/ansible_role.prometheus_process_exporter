@@ -1,0 +1,27 @@
+---
+- name: "stop {{ prometheus_process_exporter_name }}"
+  service:
+    name: "{{ prometheus_process_exporter_name }}"
+    state: stopped
+    enabled: no
+
+- name: "rm {{ prometheus_process_exporter_name }}.service"
+  file:
+    path: /etc/systemd/system/{{ prometheus_process_exporter_name }}.service
+    state: absent
+  when: ansible_service_mgr == "systemd"
+
+- name: "systemd daemon-reload"
+  systemd:
+    daemon_reload: true
+  when: ansible_service_mgr == "systemd"
+
+- name: "remove {{ prometheus_process_exporter_name }} user"
+  user:
+    name: "{{ prometheus_process_exporter_name }}"
+    state: absent
+
+- name: "rm {{ prometheus_process_exporter_name }} executable"
+  file:
+    path: /usr/local/bin/{{ prometheus_process_exporter_name }}
+    state: absent
