@@ -1,10 +1,12 @@
 ---
+
 galaxy_info:
-  author: dginhoux
+  role_name: ginhouxnet.prometheus_process_exporter
   description: install prometheus process_exporter and configure prometheus process_exporter
+  author: dginhoux
   company: ginhouxnet
-  license: MIT
-  min_ansible_version: 2.12
+  license: BSD
+  min_ansible_version: "2.12"
   platforms:
     - name: Debian
       versions:
@@ -12,21 +14,18 @@ galaxy_info:
         - bullseye
     - name: Fedora
       versions:
-        - 33
-        - 34
-        - 35
-        - 36
-        - 37
-    - name: CentOS
-      versions:
-        - 7
-        - 8
+        - "33"
+        - "34"
+        - "35"
+        - "36"
     - name: EL
       versions:
-        - 7
-        - 8
+        - "7"
+        - "8"
   galaxy_tags:
     - prometheus
     - process
     - exporter
-  dependencies: []
+
+
+dependencies: []
