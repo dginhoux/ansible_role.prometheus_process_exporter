@@ -1,7 +1,7 @@
 ---
 
 galaxy_info:
-  role_name: ginhouxnet.prometheus_process_exporter
+  role_name: prometheus_process_exporter
   description: install prometheus process_exporter and configure prometheus process_exporter
   author: dginhoux
   company: ginhouxnet
