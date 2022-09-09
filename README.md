@@ -9,21 +9,20 @@ It can be deploy as binary downloaded from github OR as docker
 Requirements
 ------------
 
-This ansible role will only run on identified OS defined on meta/main.yml
+This role is built to only run on platforms defined in `meta/main.yml`
 
 
 Role Variables
 --------------
 
-Read defaults/main.yml
+Necessary variables are defined on `defaults/main.yml`
 
 
 
 Dependencies
 ------------
 
-
-
+none
 
 Example Playbook
 ----------------
@@ -39,5 +38,5 @@ BSD
 Author Information
 ------------------
 
-Dany GINHOUX
+https://github.com/dginhoux/
 
