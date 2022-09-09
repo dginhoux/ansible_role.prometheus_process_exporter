@@ -1,5 +1,4 @@
 ---
-
 galaxy_info:
   role_name: prometheus_process_exporter
   description: install prometheus process_exporter and configure prometheus process_exporter
@@ -26,6 +25,5 @@ galaxy_info:
     - prometheus
     - process
     - exporter
-
 
 dependencies: []

@@ -26,10 +26,10 @@
     dest: /tmp
     remote_src: true
   when: not prometheus_process_exporter_bin_stat.stat.exists
-        or 
-        prometheus_process_exporter_version_check.stdout is not defined
-        or
-        prometheus_process_exporter_version not in prometheus_process_exporter_version_check.stdout
+    or
+    prometheus_process_exporter_version_check.stdout is not defined
+    or
+    prometheus_process_exporter_version not in prometheus_process_exporter_version_check.stdout
 
 - name: "move {{ prometheus_process_exporter_name }} binary into place"
   copy:
@@ -38,10 +38,10 @@
     mode: 0755
     remote_src: true
   when: not prometheus_process_exporter_bin_stat.stat.exists
-        or 
-        prometheus_process_exporter_version_check.stdout is not defined
-        or
-        prometheus_process_exporter_version not in prometheus_process_exporter_version_check.stdout
+    or
+    prometheus_process_exporter_version_check.stdout is not defined
+    or
+    prometheus_process_exporter_version not in prometheus_process_exporter_version_check.stdout
 
 - name: "create {{ prometheus_process_exporter_name }} user"
   user:
