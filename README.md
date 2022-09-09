@@ -1,7 +1,7 @@
 ginhouxnet.prometheus_process_exporter
 =========
 
-This ansible role install prometheus process exporter.
+This ansible role install, configure and uninstall prometheus process exporter.
 It can be deploy as binary downloaded from github OR as docker
 
 
@@ -23,6 +23,7 @@ Dependencies
 ------------
 
 none
+
 
 Example Playbook
 ----------------
