@@ -2,7 +2,7 @@
 - name: "install {{ prometheus_process_exporter_name }}"
   block:
     - name: create config file
-      template:
+      ansible.builtin.template:
         #content: "{{ prometheus_process_exporter_conf_file_content }}"
         src: process-exporter.yml
         dest: "{{ prometheus_process_exporter_conf_file_path }}"
@@ -12,13 +12,13 @@
         variable_start_string: ___
         variable_end_string: ___
 
-    - include_tasks:
+    - ansible.builtin.include_tasks:
         file: tasks/sub-tasks/install_docker.yml
       when: deploy_process_exporter_mode is defined
         and
         deploy_process_exporter_mode == "docker"
 
-    - include_tasks:
+    - ansible.builtin.include_tasks:
         file: tasks/sub-tasks/install_binary.yml
       when: deploy_process_exporter_mode is defined
         and
@@ -39,20 +39,20 @@
 
 - name: "uninstall {{ prometheus_process_exporter_name }}"
   block:
-    - include_tasks:
+    - ansible.builtin.include_tasks:
         file: tasks/sub-tasks/uninstall_docker.yml
       when: deploy_process_exporter_mode is defined
         and
         deploy_process_exporter_mode == "docker"
 
-    - include_tasks:
+    - ansible.builtin.include_tasks:
         file: tasks/sub-tasks/uninstall_binary.yml
       when: deploy_process_exporter_mode is defined
         and
         deploy_process_exporter_mode == "binary"
 
     - name: remove config file
-      file:
+      ansible.builtin.file:
         path: "{{ prometheus_process_exporter_conf_file_path }}"
         state: absent
 

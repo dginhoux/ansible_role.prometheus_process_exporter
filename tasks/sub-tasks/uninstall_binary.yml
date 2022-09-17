@@ -1,18 +1,18 @@
 ---
 - name: "stop {{ prometheus_process_exporter_name }}"
-  service:
+  ansible.builtin.service:
     name: "{{ prometheus_process_exporter_name }}"
     state: stopped
     enabled: no
 
 - name: "rm {{ prometheus_process_exporter_name }}.service"
-  file:
+  ansible.builtin.file:
     path: /etc/systemd/system/{{ prometheus_process_exporter_name }}.service
     state: absent
   when: ansible_service_mgr == "systemd"
 
 - name: "systemd daemon-reload"
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: true
   when: ansible_service_mgr == "systemd"
 
@@ -22,6 +22,6 @@
     state: absent
 
 - name: "rm {{ prometheus_process_exporter_name }} executable"
-  file:
+  ansible.builtin.file:
     path: /usr/local/bin/{{ prometheus_process_exporter_name }}
     state: absent
