@@ -2,9 +2,9 @@
 galaxy_info:
   role_name: prometheus_process_exporter
   description: install prometheus process_exporter and configure prometheus process_exporter
-  author: dginhoux
-  company: ginhouxnet
-  license: BSD
+  author: Dany GINHOUX
+  company: dginhoux
+  license: MIT
   min_ansible_version: "2.12"
   platforms:
     - name: Debian
