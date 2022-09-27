@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name: prometheus_process_exporter
-  description: install prometheus process_exporter and configure prometheus process_exporter
+  description: dginhoux.prometheus_process_exporter
   author: Dany GINHOUX
   company: dginhoux
   license: MIT
