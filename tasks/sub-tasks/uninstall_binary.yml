@@ -4,6 +4,7 @@
     name: "{{ prometheus_process_exporter_name }}"
     state: stopped
     enabled: no
+  ignore_errors: true
 
 - name: "rm {{ prometheus_process_exporter_name }}.service"
   ansible.builtin.file:
