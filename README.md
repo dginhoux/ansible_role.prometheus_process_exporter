@@ -15,7 +15,7 @@ It can be deploy as binary downloaded from github OR as docker (no public image,
 
 This role require a supported platform.<br />
 It will skip process with unsupported platform to avoid any compatibility problem.<br />
-This behaviour can be bypassed by settings the following variable `skip_check_platform_compatibility=True`.
+This behaviour can be bypassed by settings the following variable `skip_check_platform_compatibility=true`.
 
 | Platform | Versions |
 |----------|----------|
