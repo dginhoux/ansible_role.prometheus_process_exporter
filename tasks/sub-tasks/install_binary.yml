@@ -69,7 +69,7 @@
   when: ansible_service_mgr == "sysvinit"
 
 # - name: "sysvinit enable"
-#   ansible.builtin.shell:
+#   ansible.builtin.command:
 #     cmd: "chkconfig {{ prometheus_process_exporter_name }} on"
 #   when: ansible_service_mgr == "sysvinit"
 
