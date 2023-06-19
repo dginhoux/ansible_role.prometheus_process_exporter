@@ -17,9 +17,9 @@
         - "{{ ansible_distribution | lower }}.yml"
         - "{{ ansible_os_family | lower }}.yml"
         - "{{ ansible_system | lower }}.yml"
-        - "main.yml"
+        - main.yml
       paths:
-        - "vars"
+        - vars
       skip: true
   loop_control:
     loop_var: included_vars
@@ -35,9 +35,9 @@
         - "{{ ansible_distribution | lower }}.yml"
         - "{{ ansible_os_family | lower }}.yml"
         - "{{ ansible_system | lower }}.yml"
-        - "main.yml"
+        - main.yml
       paths:
-        - "tasks/distribution"
+        - tasks/distribution
       skip: true
   loop_control:
     loop_var: included_tasks

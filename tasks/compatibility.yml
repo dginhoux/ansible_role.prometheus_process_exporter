@@ -1,10 +1,9 @@
 ---
-
 - name: Load role metas
   tags:
     - compatibility
   ansible.builtin.include_vars:
-    file: "meta/main.yml"
+    file: meta/main.yml
 
 - name: Get role supported platforms
   tags:

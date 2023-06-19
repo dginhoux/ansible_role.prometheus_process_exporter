@@ -1,28 +1,28 @@
 ---
-- name: "stop {{ prometheus_process_exporter_name }}"
+- name: Stop process_exporter
+  ignore_errors: true
   ansible.builtin.service:
     name: "{{ prometheus_process_exporter_name }}"
     state: stopped
-    enabled: no
-  ignore_errors: true
+    enabled: false
 
-- name: "rm {{ prometheus_process_exporter_name }}.service"
+- name: Remove process_exporter.service
+  when: ansible_service_mgr == "systemd"
   ansible.builtin.file:
     path: /etc/systemd/system/{{ prometheus_process_exporter_name }}.service
     state: absent
-  when: ansible_service_mgr == "systemd"
 
-- name: "systemd daemon-reload"
+- name: Systemd daemon-reload
+  when: ansible_service_mgr == "systemd"
   ansible.builtin.systemd:
     daemon_reload: true
-  when: ansible_service_mgr == "systemd"
 
-- name: "remove {{ prometheus_process_exporter_name }} user"
-  user:
+- name: Remove process_exporter user
+  ansible.builtin.user:
     name: "{{ prometheus_process_exporter_name }}"
     state: absent
 
-- name: "rm {{ prometheus_process_exporter_name }} executable"
+- name: Remove process_exporter executable
   ansible.builtin.file:
     path: /usr/local/bin/{{ prometheus_process_exporter_name }}
     state: absent

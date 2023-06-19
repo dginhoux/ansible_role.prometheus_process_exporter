@@ -1,11 +1,11 @@
 ---
-- name: stop process_exporter container
+- name: Stop process_exporter container
   community.docker.docker_container:
     name: process_exporter
     state: stopped
   ignore_errors: true
 
-- name: remove process_exporter container
+- name: Remove process_exporter container
   community.docker.docker_container:
     name: process_exporter
     state: absent

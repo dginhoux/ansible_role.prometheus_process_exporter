@@ -1,5 +1,5 @@
 ---
-- name: start process_exporter container
+- name: Start process_exporter container
   community.docker.docker_container:
     name: process_exporter
     state: started
@@ -23,4 +23,4 @@
     # ports:
     #   - "9100:9100"
     memory: 128m
-    cpus: 0.15
+    cpus: !!float "0.15"

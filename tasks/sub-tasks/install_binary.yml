@@ -1,85 +1,87 @@
 ---
-- name: "check current {{ prometheus_process_exporter_name }} version"
-  ansible.builtin.stat:
-    path: "{{ prometheus_process_exporter_bin_path }}"
+- name: Check current process_exporter version
   failed_when: false
   changed_when: false
   register: prometheus_process_exporter_bin_stat
+  ansible.builtin.stat:
+    path: "{{ prometheus_process_exporter_bin_path }}"
 
-- name: "check current {{ prometheus_process_exporter_name }} version"
-  ansible.builtin.command: "{{ prometheus_process_exporter_bin_path }} --version"
+- name: Check current process_exporter version
+  when: prometheus_process_exporter_bin_stat.stat.exists
   failed_when: false
   changed_when: false
   register: prometheus_process_exporter_version_check
-  when: prometheus_process_exporter_bin_stat.stat.exists
+  ansible.builtin.command: "{{ prometheus_process_exporter_bin_path }} --version"
 
-- name: "stop {{ prometheus_process_exporter_name }}"
+- name: Stop process_exporter
+  when: prometheus_process_exporter_bin_stat.stat.exists
+  ignore_errors: true
   ansible.builtin.service:
     name: "{{ prometheus_process_exporter_name }}"
     state: stopped
-    enabled: no
-  ignore_errors: true
-  when: prometheus_process_exporter_bin_stat.stat.exists
+    enabled: false
 
-- name: "download and decompress {{ prometheus_process_exporter_name }} into temporary location"
-  unarchive:
-    src: "{{ prometheus_process_exporter_download_url | replace(' ','') }}"
+- name: Download and decompress process_exporter into temporary location
+  when:
+    not prometheus_process_exporter_bin_stat.stat.exists
+    or
+    prometheus_process_exporter_version_check.stdout is not defined
+    or
+    prometheus_process_exporter_version not in prometheus_process_exporter_version_check.stdout
+  ansible.builtin.unarchive:
+    src: "{{ prometheus_process_exporter_download_url | replace(' ', '') }}"
     dest: /tmp
     remote_src: true
-  when: not prometheus_process_exporter_bin_stat.stat.exists
+
+- name: Move process_exporter binary into place
+  when:
+    not prometheus_process_exporter_bin_stat.stat.exists
     or
     prometheus_process_exporter_version_check.stdout is not defined
     or
     prometheus_process_exporter_version not in prometheus_process_exporter_version_check.stdout
-
-- name: "move {{ prometheus_process_exporter_name }} binary into place"
   ansible.builtin.copy:
-    src: "/tmp/{{ prometheus_process_exporter_name }}-{{ prometheus_process_exporter_version }}.linux-{{ prometheus_process_exporter_arch }}/{{ prometheus_process_exporter_name }}"
+    src: /tmp/{{ prometheus_process_exporter_name }}-{{ prometheus_process_exporter_version }}.linux-{{ prometheus_process_exporter_arch }}/{{ prometheus_process_exporter_name }}
     dest: "{{ prometheus_process_exporter_bin_path }}"
-    mode: 0755
+    mode: "0755"
     remote_src: true
-  when: not prometheus_process_exporter_bin_stat.stat.exists
-    or
-    prometheus_process_exporter_version_check.stdout is not defined
-    or
-    prometheus_process_exporter_version not in prometheus_process_exporter_version_check.stdout
 
-- name: "create {{ prometheus_process_exporter_name }} user"
-  user:
+- name: Create process_exporter user
+  ansible.builtin.user:
     name: "{{ prometheus_process_exporter_name }}"
     shell: /sbin/nologin
     state: present
 
-- name: "create {{ prometheus_process_exporter_name }} systemd unit file"
+- name: Create process_exporter systemd unit file
+  when: ansible_service_mgr == "systemd"
   ansible.builtin.template:
     src: exporter.service.j2
     dest: /etc/systemd/system/{{ prometheus_process_exporter_name }}.service
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
-  when: ansible_service_mgr == "systemd"
 
-- name: "create {{ prometheus_process_exporter_name }} sysv init file"
+- name: Create process_exporter sysv init file
+  when: ansible_service_mgr == "sysvinit"
   ansible.builtin.template:
     src: exporter.j2
     dest: /etc/init.d/{{ prometheus_process_exporter_name }}
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
-  when: ansible_service_mgr == "sysvinit"
 
 # - name: "sysvinit enable"
 #   ansible.builtin.command:
 #     cmd: "chkconfig {{ prometheus_process_exporter_name }} on"
 #   when: ansible_service_mgr == "sysvinit"
 
-- name: "systemd daemon-reload"
+- name: Systemd daemon-reload
+  when: ansible_service_mgr == "systemd"
   ansible.builtin.systemd:
     daemon_reload: true
-  when: ansible_service_mgr == "systemd"
 
-- name: "ensure {{ prometheus_process_exporter_name }} is started"
+- name: Ensure process_exporter is started
   ansible.builtin.service:
     name: "{{ prometheus_process_exporter_name }}"
-    enabled: yes
+    enabled: true
     state: started
