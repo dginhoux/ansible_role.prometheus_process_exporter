@@ -1,5 +1,6 @@
 ---
 - name: Start process_exporter container
+  become: true
   community.docker.docker_container:
     name: process_exporter
     state: started

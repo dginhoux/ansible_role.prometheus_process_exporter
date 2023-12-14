@@ -1,5 +1,6 @@
 ---
 - name: Stop process_exporter
+  become: true
   ignore_errors: true
   ansible.builtin.service:
     name: "{{ prometheus_process_exporter_name }}"
@@ -7,22 +8,26 @@
     enabled: false
 
 - name: Remove process_exporter.service
+  become: true
   when: ansible_service_mgr == "systemd"
   ansible.builtin.file:
     path: /etc/systemd/system/{{ prometheus_process_exporter_name }}.service
     state: absent
 
 - name: Systemd daemon-reload
+  become: true
   when: ansible_service_mgr == "systemd"
   ansible.builtin.systemd:
     daemon_reload: true
 
 - name: Remove process_exporter user
+  become: true
   ansible.builtin.user:
     name: "{{ prometheus_process_exporter_name }}"
     state: absent
 
 - name: Remove process_exporter executable
+  become: true
   ansible.builtin.file:
     path: /usr/local/bin/{{ prometheus_process_exporter_name }}
     state: absent
